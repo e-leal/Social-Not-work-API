@@ -14,9 +14,23 @@ const UserSchema = new Schema({
         required: 'Email is a required field',
         match: [/.+@.+\..+/, 'Please enter a valid e-mail address']
     },
-    thoughts: []
-
-})
+    thoughts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Thought'
+        }
+    ]
+},
+{
+    toJSON: {
+        virtuals: true,
+    },
+    id: false
+});
+//get total amount of thoughts and replies on retreival
+UserSchema.virtual('thoughtCount').get(function(){
+    return this.thoughts.length;
+});
 
 const User = model('User', UserSchema);
 module.exports = User;
