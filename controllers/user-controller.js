@@ -18,7 +18,7 @@ const userController ={
         User.findOne({_id: params.id})
         .then(dbUserData => {
             //if no user is found, send 404
-            if(!dbUserData => {
+            if(!dbUserData){
                 res.status(404).json({message: 'No user found with this id!'});
                 return;
             }
