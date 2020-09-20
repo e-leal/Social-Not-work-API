@@ -6,7 +6,7 @@ const {
     updateUser,
     deleteUser
 } = require('../../controllers/user-controller');
-const { updateUser } = require('../../controllers/user-controller');
+// const { updateUser } = require('../../controllers/user-controller');
 
 // set up GET all and POST 
 router
