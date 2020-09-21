@@ -1,5 +1,4 @@
 const {Schema, model} = require('mongoose');
-const { triggerAsyncId } = require('async_hooks');
 
 const UserSchema = new Schema({
     username: {
@@ -30,7 +29,7 @@ const UserSchema = new Schema({
 });
 //get total amount of thoughts and replies on retreival
 UserSchema.virtual('thoughtCount').get(function(){
-    return this.thoughts.length;
+    return this.thoughts.reduce((total, thought)=> total + thought.reactions.length+1, 0);
 });
 
 const User = model('User', UserSchema);
