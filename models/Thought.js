@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const moment = require('moment');
 
 const ThoughtSchema = new Schema({
     thoughtText: {
@@ -18,6 +19,13 @@ const ThoughtSchema = new Schema({
         required: 'username is a required field!'
     },
     reactions: []
+},
+{
+    toJSON: {
+        virtuals: true,
+        getters: true
+    },
+    id: false
 });
 
 const Thought = model('Thought', ThoughtSchema);
