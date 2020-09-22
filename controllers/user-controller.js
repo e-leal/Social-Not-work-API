@@ -72,7 +72,35 @@ const userController ={
             res.json(dbUserData);
         })
         .catch(err => res.status(400).json(err));
-    }
+    },
+
+    // Add a friend
+    addFriend({params}, res){
+        User.findOneAndUpdate(
+            {_id: params.id},
+            { $push: { friends: body } },
+            { new: true }
+        )
+        .then(dbUserData => {
+            if(!dbUserData){
+                res.status(404).json({message: 'No user found with that id'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.json(err));
+    },
+
+    // remove Friend
+    removeFriend({ params }, res){
+        User.findOneAndUpdate(
+            { _id: params.id },
+            { $pull: { friends: { friendId: params.friendId } } },
+            { new: true }
+        )
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => res.json(err));
+    },
 };
 
 module.exports = userController;
