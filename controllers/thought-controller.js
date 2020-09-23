@@ -22,6 +22,54 @@ const thoughtController = {
         .catch(err => res.json(err));
     },
 
+    updateThought({params, body}, res){
+        Thought.findOneAndUpdate( {_id: params.thoughtId}, body, {new: true})        
+        .then(dbUserData => {
+            if(!dbUserData){
+                res.status(404).json({message: 'No thought found with that id!'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));
+    },
+
+    getAllThoughts(req, res){
+        Thought.find({})
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
+        .select('-__v')
+        .sort({_id: -1})
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => {
+            console.log(err);
+            req.status(500).json(err);
+        });
+    },
+
+    getThoughtById({params}, res){
+        Thought.findOne({_id: params.thoughtId})
+        .populate({
+            path: 'reactions',
+            select: '-__v'
+        })
+        .select('-__v')
+        .then(dbUserData => {
+            //if no user is found, send 404
+            if(!dbUserData){
+                res.status(404).json({message: 'No user found with this id!'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    },
+
     //add reaction
     addReaction({params, body}, res){
         Thought.findOneAndUpdate(
